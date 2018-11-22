@@ -16,56 +16,54 @@ function adicionarCliente() {
     foreach ($_POST as $aux){
         $aux = trim(htmlentities($aux));    
     }
+
     $count = 1;
     if (!empty($_POST)){
         if (empty($_POST["nome"])){
-            echo "<script>alert('Preencha o campo Nome!');</script>";
+            alert('Preencha o campo Nome!');
             $count += 1;
         }
         if (empty($_POST["senha"]) or strlen($_POST["senha"]) < 8){
-            echo "<script>alert('Preencha corretamente o campo Senha!');</script>";
+            alert('Preencha corretamente o campo Senha!');
             $count += 1;
         }
         if (empty($_POST["email"]) or !filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)){
-            echo "<script>alert('Preencha o campo E-mail corretamente!');</script>";
+            alert('Preencha o campo E-mail corretamente!');
             $count += 1;
         }
         if (empty($_POST["dia"]) or !filter_var($_POST["dia"], FILTER_VALIDATE_FLOAT) or strlen($_POST["dia"]) < 1){
-            echo "<script>alert('Preencha o campo Dia!');</script>";
+            alert('Preencha o campo Dia!');
             $count += 1;
         }
         if (empty($_POST["mes"]) or !filter_var($_POST["mes"], FILTER_VALIDATE_FLOAT) or strlen($_POST["mes"]) < 1){
-            echo "<script>alert('Preencha o campo Mês!');</script>";
+            alert('Preencha o campo Mês!');
             $count += 1;
         }
         if (empty($_POST["ano"]) or !filter_var($_POST["ano"], FILTER_VALIDATE_FLOAT) or strlen($_POST["ano"]) < 4){
-            echo "<script>alert('Preencha o campo Ano!');</script>";
+            alert('Preencha o campo Ano!');
             $count += 1;
         }
         if (empty($_POST["estado"])){
-            echo "<script>alert('Preencha o campo Estado!');</script>";
+            alert('Preencha o campo Estado!');
             $count += 1;
         }
         if (empty($_POST["cidade"])){
-            echo "<script>alert('Preencha o campo Cidade!');</script>";
+            alert('Preencha o campo Cidade!');
             $count += 1;
         }
         if (empty($_POST["rua"])){
-            echo "<script>alert('Preencha o campo Rua!');</script>";
+            alert('Preencha o campo Rua!');
             $count += 1;
         }
         if (empty($_POST["numero"]) or !filter_var($_POST["numero"], FILTER_VALIDATE_FLOAT)){
-            echo "<script>alert('Preencha o campo Número com um número inteiro!');</script>";
+            alert('Preencha o campo Número com um número inteiro!');
             $count += 1;
         }
         if (empty($_POST["cpf"]) or !filter_var($_POST["cpf"], FILTER_VALIDATE_FLOAT) or strlen($_POST["cpf"]) <> 11){
-            echo "<script>alert('Preencha o campo Cpf com números inteiros!');</script>";
+            alert('Preencha o campo Cpf com números inteiros!');
             $count += 1;
         }
-        if (!$_POST["sexo"]){
-            echo "<script>alert('Preencha o campo Sexo!');</script>";
-            $count += 1;
-        }
+        alert($count);
         if ($count == 1) {
             $nome = $_POST["nome"];
             $email = $_POST["email"];
@@ -76,6 +74,7 @@ function adicionarCliente() {
             $numero = $_POST["numero"];
             $senha = $_POST["senha"];
             $cpf = $_POST["cpf"];
+            alert("passo 2");
             cadastra ($nome, $email, $idade, $rua, $cidade, $estado, $numero, $senha, $cpf);
         }
     }
@@ -148,5 +147,28 @@ function produtosCategoria(){
 }
 
 function pedidosEntreDatas ($data1, $data2) {
-    $sql = "CALL pedidos_intervalo_datas(@'$data1', @'$data2')";
+    $sql = "CALL pedidos_intervalo_datas('$data1', '$data2')";
+    $help = mysqli_query(conn(), $sql);
+    while($registro = mysqli_fetch_assoc($help)) {
+		$retorno[] = $registro;
+	}
+    return($retorno);
+}
+
+function pedidosMunicipio ($cidade) {
+    $sql = "CALL pedidos_municipio('$cidade')";
+    $help = mysqli_query(conn(), $sql);
+    while($registro = mysqli_fetch_assoc($help)) {
+		$retorno[] = $registro;
+    }
+    return($retorno);
+}
+
+function pedidosPeriodo ($data) {
+    $sql = "CALL faturamento_periodo('$data')";
+    $help = mysqli_query(conn(), $sql);
+    while($registro = mysqli_fetch_assoc($help)) {
+		$retorno[] = $registro;
+	}
+    return($retorno);
 }
